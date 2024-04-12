@@ -9,7 +9,7 @@ This project is a simple example of consuming a public RestFul API in a Flutter 
 
 This is a multi-platform application that has been updated to Flutter version 3.19.5. It has been tested as a progressive web application (PWA) and Andriod application. Full support for IoS and desktop is available.
 
-This is fun implementation made possible by the folks at chucknorris.io (https://api.chucknorris.io/). The content is not necessarily politically corret (PC), but no intent to offend anyone is intended. Use at your own risk.
+This is a fun implementation made possible by the folks at chucknorris.io (https://api.chucknorris.io/). The content is not necessarily politically correct (PC), but there no intent to offend anyone. Use at your own risk.
 Please enjoy this project as a fun tool and nothing more.
 
 A few resources to get you started if this is your first Flutter project:
