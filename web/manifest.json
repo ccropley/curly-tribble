@@ -1,6 +1,6 @@
 {
-    "name": "jokes_api",
-    "short_name": "jokes_api",
+    "name": "api_example",
+    "short_name": "api_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

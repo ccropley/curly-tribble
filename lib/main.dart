@@ -1,104 +1,61 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+void main() => runApp(const MyApp());
 
-Future<Album> fetchAlbum() async {
-  final response =
-      await http.get(Uri.parse('https://api.chucknorris.io/jokes/random'));
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-class Album {
-  // final int icon;
-  final String id;
-  // final int url;
-  final String value;
-
-  Album({
-    // required this.icon,
-    required this.id,
-    // required this.url,
-    required this.value,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      // icon: json['con_url'],
-      id: json['id'],
-      // url: json['url'],
-      value: json['value'],
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Because Chuck Norris says so!')),
+        body: const MyWidget(),
+      ),
     );
   }
 }
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _MyWidgetState createState() => _MyWidgetState();
 }
 
-class _MyAppState extends State<MyApp> {
-  late Future<Album> futureAlbum;
+class _MyWidgetState extends State<MyWidget> {
+  String data = '';
 
-  @override
-  void initState() {
-    super.initState();
-    futureAlbum = fetchAlbum();
+  Future<void> fetchData() async {
+    try {
+      final response = await http.get(Uri.parse('https://api.chucknorris.io/jokes/random'));
+      if (response.statusCode == 200) {
+        setState(() {
+          data = json.decode(response.body)['value'];
+        });
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      // Handle the error (e.g., show an error message)
+    }
   }
 
+
   @override
-
-  static MediaQueryData of(BuildContext context) {
-    assert(context != null);
-    assert(debugCheckHasMediaQuery(context));
-    return context.dependOnInheritedWidgetOfExactType<MediaQuery>()!.data;
-  }
-
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Random Chuck Norris ism',
-      theme: ThemeData(
-          // Define the default brightness and colors.
-          brightness: Brightness.dark,
-          primaryColor: Colors.lightBlue[800],
-
-          // Define the default font family.
-          fontFamily: 'Georgia'),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Because Chuck Norris Says So!'),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: fetchData,
+          child: const Text('Fetch Data'),
         ),
-        body: Center(
-      child: FutureBuilder<Album>(
-        future: futureAlbum,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(snapshot.data!.value);
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          // By default, show a loading spinner.
-          return const CircularProgressIndicator();
-        },
-      ),
-    ),
-    ),
+        const SizedBox(height: 20),
+        Text(data),
+      ],
     );
   }
 }
